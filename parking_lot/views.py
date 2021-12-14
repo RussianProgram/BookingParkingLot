@@ -90,18 +90,21 @@ class ReservationMixinView(LoginRequiredMixin,generic.FormView):
         booked_until_this = to_datetime(request.POST['booked_until'])
         slot_reservations = self.get_queryset()
         is_valid = False
-        for r in slot_reservations:
-            if r.booked_by.user != request.user:
-                if (booked_from_this < r.booked_from.timestamp()) \
-                        and (booked_until_this < r.booked_from.timestamp()):
-                    is_valid = True
-                elif booked_from_this > r.booked_until.timestamp():
-                    is_valid = True
+        if slot_reservations.exists():
+            for r in slot_reservations:
+                if r.booked_by.user != request.user:
+                    if (booked_from_this < r.booked_from.timestamp()) \
+                            and (booked_until_this < r.booked_from.timestamp()):
+                        is_valid = True
+                    elif booked_from_this > r.booked_until.timestamp():
+                        is_valid = True
+                    else:
+                        is_valid = False
+                        break
                 else:
-                    is_valid = False
-                    break
-            else:
-                 is_valid = True
+                     is_valid = True
+          else:
+            is_valid = True
 
         if is_valid:
             return self.form_valid(self.get_form())
