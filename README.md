@@ -14,3 +14,11 @@ python manage.py createsuperuser
 ## Описание API
 
 См. [API.md](API.md)
+
+# Ссылка на рабочий проект: http://russianprogram.pythonanywhere.com/
+```
+/parking-lot/list
+/parking-lot/detail/<slot_number>
+...
+
+```
