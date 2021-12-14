@@ -17,6 +17,8 @@ python manage.py createsuperuser
 
 # Ссылка на рабочий проект: http://russianprogram.pythonanywhere.com/
 ```
+DEBUG = True
+
 /parking-lot/list
 /parking-lot/detail/<slot_number>
 ...
