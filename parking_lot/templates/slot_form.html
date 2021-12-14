@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if object %}
+            Edit Slot {{ object }}
+            {% else %}
+            Create a Slot
+        {% endif %}
+    </title>
+</head>
+<body>
+    <h1>
+        {% if object %}
+            Edit Slot {{ object }}
+        {% else %}
+            Create a Slot
+        {% endif %}
+    </h1>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Save slot"></p>
+    </form>
+</body>
+</html>

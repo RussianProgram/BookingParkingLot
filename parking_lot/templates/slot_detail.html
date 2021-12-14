@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ slot }} detail</title>
+</head>
+<body>
+<h3>
+    {% if request.user.is_authenticated %}
+        Hello {{ request.user.username }}
+        <p><a href="{% url "employees:employee_logout" %}">Log-out</a></p>
+    {% else %}
+        <p><a href="{% url "employees:employee_registration" %}">Sign Up</a></p>
+        <p><a href="{% url "employees:employee_login" %}">Log-in</a></p>
+    {% endif %}
+</h3>
+<h1>{{ slot }} detail</h1>
+<h4>
+    {% if request.user.employee.booked_parking_slot%}
+
+    {% else %}
+        <a href="{% url "parking_lot:reservation_create" slot.slot_number %}">Create reservation</a>
+    {% endif %}
+</h4>
+<h2>Reservations:</h2>
+<ul>
+    {% for r in slot.reservations.all %}
+       <li>Reservation by {{ r.booked_by.user.username }} on {{ r.booked_from }}
+           until {{ r.booked_until }}</li>
+        {% if r.booked_by.user == request.user %}
+            <a href="{% url "parking_lot:reservation_edit" slot_number=slot.slot_number pk=r.id %}">Edit</a>
+            <a href="{% url "parking_lot:reservation_delete" slot_number=slot.slot_number pk=r.id%}">Delete</a>
+        {% endif %}
+    {% empty %}
+        No reservations yet.
+    {% endfor %}
+</ul>
+
+</body>
+</html>

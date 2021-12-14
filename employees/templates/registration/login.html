@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log-In</title>
+</head>
+<body>
+<h1>Log-In</h1>
+{% if form.errors %}
+    <p>Your username and password didn't match. Try again.</p>
+    {% else %}
+    <p>Please log-in.</p>
+{% endif %}
+<form action="{% url "employees:employee_login" %}" method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <p><input type="submit" value="Log-in"></p>
+</form>
+
+</body>
+</html>

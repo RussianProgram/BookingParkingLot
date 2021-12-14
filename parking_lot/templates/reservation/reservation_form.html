@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% if object %}
+            Edit Reservation {{ object }}
+            {% else %}
+            Create a Reservation
+        {% endif %}
+    </title>
+</head>
+<body>
+    <h1>
+        {% if object %}
+            Edit Reservation for {{ request.user.username }}
+        {% else %}
+            Create a Reservation
+        {% endif %}
+    </h1>
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Save reservation"></p>
+    </form>
+</body>
+</html>

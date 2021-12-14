@@ -1,0 +1,66 @@
+{% load parking_lot_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Parking Slots List</title>
+</head>
+<body>
+<h3>
+    {% if request.user.is_authenticated %}
+        Hello {{ request.user.username }}
+        <p><a href="{% url "employees:employee_logout" %}">Log-out</a></p>
+    {% else %}
+        <p><a href="{% url "employees:employee_registration" %}">Sign Up</a></p>
+        <p><a href="{% url "employees:employee_login" %}">Log-in</a></p>
+    {% endif %}
+</h3>
+
+
+<h1>Parking slots list</h1>
+
+<h2>Slots for {{ day }}</h2>
+
+<h4>
+    <form action="." method="get">
+        <label for="day">Set up the date</label>
+        {% csrf_token %}
+        <input type="date" id="day" name="day" value="{{ day }}">
+        <input type="submit" formmethod="post" value="Set">
+    </form>
+</h4>
+
+{% if request.user.employee.role == 'manager' %}
+    <a href="{% url "parking_lot:parking_slot_create" %}">Create slot</a>
+{% endif %}
+<ul>
+    {% for slot in parking_slot_list %}
+        <input type="hidden" name="slot_number" value="{{ slot.slot_number }}">
+        <li>
+            <h3>
+                <p><a href="{{ slot.get_absolute_url }}">{{ slot }}</a>
+                    {% if request.user.employee.role == 'manager' %}
+                        ||<a href="{% url "parking_lot:parking_slot_delete" slot.slot_number%}">delete</a>||
+                        <a href="{% url "parking_lot:parking_slot_edit" slot.slot_number%}">edit</a>
+                        </p>
+
+                    {% endif %}
+            </h3>
+        </li>
+
+        <h4>Reservations:</h4>
+        <ul>
+            {% for r in slot.reservations|day_filter:day %}
+                <li>
+                    { from: {{ r.booked_from }} |
+                    until: {{ r.booked_until }} |
+                    by: {{ r.booked_by.user.username }} }
+                </li>
+                {% empty %}
+                    No reservations yet.
+            {% endfor %}
+        </ul>
+    {% endfor %}
+</ul>
+</body>
+</html>
